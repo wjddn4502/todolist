@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+  <title>완료된 TODO 목록</title>
+</head>
+<body>
+
+<div class="container">
+  <h1>완료된 TODO 목록</h1>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <ul class="list-group">
+              {% for todo in todos %}
+                <li class="list-group-item">
+                  <h5>{{ todo.title }}</h5>
+                  <p>{{ todo.description }}</p>
+                  <p>완료 날짜: {{ todo.created_at|date:"Y-m-d H:i" }}</p>
+                    <a href="{% url 'todo_done_delete' todo.id %}" class="btn btn-outline-danger">삭제</a>
+                  <a href="{% url 'todo_detail' todo.id %}" class="btn btn-outline-primary">상세보기</a>
+                    <a href="{% url 'todo_list' %}" class="btn btn-primary">목록으로</a>
+                </li>
+              {% empty %}
+                <li class="list-group-item">완료된 TODO가 없습니다.</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+<!-- Bootstrap JS 및 의존성 -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
