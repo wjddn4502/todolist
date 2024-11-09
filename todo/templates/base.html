@@ -1,0 +1,53 @@
+{% load static %}
+<!doctype html>
+<html lang="ko">
+<head>
+      <!-- Bootstrap CSS (여기에 Bootstrap CSS 링크 추가) -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}">
+    <!-- pybo CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <title>Hello, pybo!</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'todo:todo_list' %}">아무튼 투두앱</a>
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    {% if user.is_authenticated %}
+                        <a class="nav-link" href="{% url 'common:logout' %}">{{ user.username }} (로그아웃)</a>
+                    {% else %}
+                    <a class="nav-link" href="{% url 'common:login' %}">로그인</a>
+                    {% endif %}
+                </li>
+                <li>
+                    {% if not user.is_authenticated %}
+                    <a class="nav-link" href="{% url 'common:signup' %}">회원가입</a>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- 기본 템플릿 안에 삽입될 내용 Start -->
+{% block content %}
+{% endblock %}
+<!-- 기본 템플릿 안에 삽입될 내용 End -->
+</body>
+</html>
+<!-- 네비게이션바 -->
