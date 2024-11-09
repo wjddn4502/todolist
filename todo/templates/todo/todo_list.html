@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% block content %}
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+        integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+
+  <title>TODO LIST</title>
+</head>
+
+<body>
+    <div class="row my-3">
+        <div class="col-6">
+            <div class="input-group">
+                <input type="text" id="search_kw" class="form-control" value="{{ kw|default_if_none:'' }}">
+                <div style="text-align: center;">
+    <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" id="btn_search">검색</button>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+  <div class="container my--3">
+    <h1>TODO LIST</h1>
+    <p>
+      <a href="{% url 'todo_post' %}"><i class="bi-plus"></i>ADD TODO</a>
+      <a href="{% url 'todo_done_list' %}" class="btn btn-primary" style="float:right">완료한 TODO 목록</a>
+    </p>
+    <ul class="list-group">
+      {% for todo in todos %}
+        <li class="list-group-item">
+          <a href="">{{ todo.title }}</a>
+          <small class="text-muted"> - 작성 날짜: {{ todo.created_at|date:"Y-m-d H:i" }}</small>
+          {% if todo.important %}
+            <span class="badge badge-danger">!</span>
+          {% endif %}
+          <div style="float:right">
+            <a href="{% url 'todo_delete' todo.id %}" class="btn btn-outline-danger">삭제</a>
+            <a href="{% url 'todo_done' todo.id %}" class="btn btn-danger">완료</a>
+            <a href="{% url 'todo_edit' todo.id %}" class="btn btn-outline-primary">수정하기</a>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+{% if question.answer_set.count > 0 %}
+    <span class="text-danger small mx-2">{{ todos.description.count }}</span>
+    {% endif %}
+      <ul class="pagination justify-content-center">
+        <!-- 이전페이지 -->
+        {% if question_list.has_previous %}
+        <li class="page-item">
+                   <a class="page-link" data-page="{{ question_list.previous_page_number }}"
+           href="javascript:void(0)">이전</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+        </li>
+        {% endif %}
+        <!-- 페이지리스트 -->
+        {% for page_number in question_list.paginator.page_range %}
+        {% if page_number == question_list.number %}
+        <li class="page-item active" aria-current="page">
+        <a class="page-link" data-page="{{ page_number }}"
+           href="javascript:void(0)">{{ page_number }}</a>
+        </li>
+        {% else %}
+        <li class="page-item">
+                    <a class="page-link" data-page="{{ page_number }}"
+           href="javascript:void(0)">{{ page_number }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+        <!-- 다음페이지 -->
+        {% if question_list.has_next %}
+        <li class="page-item">
+                    <a class="page-link" data-page="{{ question_list.next_page_number }}"
+           href="javascript:void(0)">다음</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+        </li>
+        {% endif %}
+    </ul>
+    <!-- 페이징처리 끝 -->
+  </div>
+<form id="searchForm" method="get" action="{% url 'todo:todo_list' %}">
+    <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:'' }}">
+    <input type="hidden" id="page" name="page" value="{{ page }}">
+</form>
+</body>
+    {% block script %}
+<script type='text/javascript'>
+const page_elements = document.getElementsByClassName("page-link");
+Array.from(page_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+        document.getElementById('page').value = this.dataset.page;
+        document.getElementById('searchForm').submit();
+    });
+});
+const btn_search = document.getElementById("btn_search");
+btn_search.addEventListener('click', function() {
+    document.getElementById('kw').value = document.getElementById('search_kw').value;
+    document.getElementById('page').value = 1;  // 검색버튼을 클릭할 경우 1페이지부터 조회한다.
+    document.getElementById('searchForm').submit();
+});
+</script>
+{% endblock %}
+{% endblock %}
