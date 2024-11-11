@@ -17,9 +17,10 @@ from django.contrib import admin
 from django.urls import path, include
 from todo import views
 from .api import api
-
+from ninja import Router
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', api.urls),
     path('todo/', include(('todo.urls', 'todo'), namespace='todo')),
     path('todo/', include('todo.urls')),  # todo 앱의 URL 포함
     path('common/', include('common.urls')),

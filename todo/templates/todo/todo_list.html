@@ -36,7 +36,7 @@
     <ul class="list-group">
       {% for todo in todos %}
         <li class="list-group-item">
-          <a href="">{{ todo.title }}</a>
+          <a href="{% url 'todo_edit' todo.id %}">{{ todo.title }}</a>
           <small class="text-muted"> - 작성 날짜: {{ todo.created_at|date:"Y-m-d H:i" }}</small>
           {% if todo.important %}
             <span class="badge badge-danger">!</span>
