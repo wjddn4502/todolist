@@ -6,6 +6,8 @@ from .forms import TodoForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.db.models import Q
+from todo.schemas import TodoSchema
+from typing import List
 # Ninja API 객체 생성
 
 api = NinjaAPI()
@@ -13,7 +15,7 @@ api = NinjaAPI()
 
 
 # /api/todos - GET 요청 처리 (API)
-@api.get("/todos", response=list[TodoSchema])
+@api.get("/todos", response=List[TodoSchema])
 def todo_list(request):
     page = request.GET.get('page', '1')  # 페이지
     todos = Todo.objects.filter(completed=False)

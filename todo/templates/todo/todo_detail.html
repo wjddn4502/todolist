@@ -1,31 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <!-- Bootstrap CSS (여기에 Bootstrap CSS 링크 추가) -->
+  <!-- Bootstrap CSS -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
-  <title>TODO LIST</title>
+  <title>TODO 수정하기</title>
 </head>
 <body>
-
-
 <div class="container">
-  <h1>작성한 TODO 보기</h1>
+  <h1>TODO 추가하기</h1>
   <div class="container">
     <div class="row">
       <div class="col-md-12">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">{{ todo.title }}</h5>
-            <p class="card-text">{{ todo.description }}</p>
-              <a href="{% url 'todo_done_delete' todo.id %}" class="btn btn-outline-danger">삭제</a>
-            <a href="{% url 'todo_list' %}" class="btn btn-primary">목록으로</a>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}  <!-- form.as_p가 필드의 레이블과 필드들을 포함 -->
+    <button type="submit" class="btn btn-primary">수정하기</button>
+</form>
+
           </div>
         </div>
       </div>

@@ -10,10 +10,9 @@ from django.db.models import Q
 api = NinjaAPI()
 
 # API 엔드포인트
-@api.get("/todos", response=list[TodoSchema])
 def todo_list(request):
     page = request.GET.get('page', '1')  # 페이지
-    todos = Todo.objects.filter(completed=False)
+    todos = Todo.objects.filter(completed=False).order_by('-created_at')  # 최신순으로 정렬
     kw = request.GET.get('kw', '')  # 검색어
 
     if kw:
@@ -38,8 +37,7 @@ def todo_post(request):
     if request.method == "POST":
         form = TodoForm(request.POST)
         if form.is_valid():
-            todo = form.save(commit=False)
-            todo.save()
+            form.save()
             return redirect('todo_list')
     else:
         form = TodoForm()
@@ -48,7 +46,7 @@ def todo_post(request):
 def todo_delete(request, pk):
     todo = get_object_or_404(Todo, id=pk)
     todo.delete()
-    return redirect('todo_list')  # 삭제 후 목록 페이지로 리다이렉트
+    return redirect('todo_list')
 
 def todo_done_delete(request, pk):
     todo = get_object_or_404(Todo, id=pk)
@@ -61,10 +59,11 @@ def todo_edit(request, pk):
         form = TodoForm(request.POST, instance=todo)
         if form.is_valid():
             form.save()
-            return redirect('todo_list')
+            return redirect('todo_list')  # 수정 후 목록으로 리디렉션
     else:
         form = TodoForm(instance=todo)
-    return render(request, 'todo/todo_post.html', {'form': form})
+    return render(request, 'todo/todo_detail.html', {'form': form, 'todo': todo})
+
 
 def home(request):
     return render(request, 'todo/home.html')  # 템플릿 경로가 정확한지 확인
