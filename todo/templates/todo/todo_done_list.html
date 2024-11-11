@@ -24,11 +24,13 @@
             <ul class="list-group">
               {% for todo in todos %}
                 <li class="list-group-item">
+
                   <h5>{{ todo.title }}</h5>
                   <p>{{ todo.description }}</p>
                   <p>완료 날짜: {{ todo.created_at|date:"Y-m-d H:i" }}</p>
+
                     <a href="{% url 'todo_done_delete' todo.id %}" class="btn btn-outline-danger">삭제</a>
-                  <a href="{% url 'todo_detail' todo.id %}" class="btn btn-outline-primary">상세보기</a>
+                  <a href="{% url 'todo_edit' todo.id %}" class="btn btn-outline-primary">수정하기</a>
                     <a href="{% url 'todo_list' %}" class="btn btn-primary">목록으로</a>
                 </li>
               {% empty %}

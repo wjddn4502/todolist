@@ -24,6 +24,10 @@
     {% csrf_token %}
     {{ form.as_p }}  <!-- form.as_p가 필드의 레이블과 필드들을 포함 -->
     <button type="submit" class="btn btn-primary">수정하기</button>
+    {% if todo.completed %}
+    <a href="{% url 'todo_done_return' todo.id %}" class="btn btn-outline-primary">되돌리기</a>
+    {% endif %}
+    <a href="{% url 'todo_done_delete' todo.id %}" class="btn-outline-danger">삭제하기</a>
 </form>
 
           </div>

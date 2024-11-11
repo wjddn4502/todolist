@@ -11,22 +11,22 @@ api = NinjaAPI()
 
 # API 엔드포인트
 def todo_list(request):
-    page = request.GET.get('page', '1')  # 페이지
-    todos = Todo.objects.filter(completed=False).order_by('-created_at')  # 최신순으로 정렬
-    kw = request.GET.get('kw', '')  # 검색어
+    page = request.GET.get('page', '1')
+    todos = Todo.objects.filter(completed=False).order_by('-created_at')
+    kw = request.GET.get('kw', '')
 
     if kw:
         todos = todos.filter(
-            Q(title__icontains=kw) |  # 제목 검색
-            Q(description__icontains=kw) |  # 설명 검색
-            Q(important__icontains=kw)  # 중요도 검색 (중요도가 텍스트라면 사용 가능)
+            Q(title__icontains=kw) |
+            Q(description__icontains=kw) |
+            Q(important__icontains=kw)
         ).distinct()
 
-    paginator = Paginator(todos, 10)  # 페이지당 10개씩 보여주기
+    paginator = Paginator(todos, 10)
     page_obj = paginator.get_page(page)
+    return render(request, 'todo/todo_list.html', {'todos': page_obj})  # 'todos': page_obj로 전달
 
-    # 기존에 사용하던 컨텍스트를 반환
-    return render(request, 'todo/todo_list.html', {'todos': page_obj})
+
 
 # 웹 뷰
 def todo_detail(request, pk):
@@ -73,6 +73,12 @@ def todo_done(request, pk):
     todo.completed = True
     todo.save()
     return redirect('todo_list')
+
+def todo_done_return(request, pk):
+    todo = get_object_or_404(Todo, id=pk)
+    todo.completed = False
+    todo.save()
+    return redirect('todo_list')  # todo_list 뷰로 리디렉션
 
 def todo_done_list(request):
     completed_todos = Todo.objects.filter(completed=True)  # completed 필드가 True인 항목만 가져옴
